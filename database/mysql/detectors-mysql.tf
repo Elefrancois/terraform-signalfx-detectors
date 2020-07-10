@@ -5,7 +5,7 @@ resource "signalfx_detector" "heartbeat" {
 		from signalfx.detectors.not_reporting import not_reporting
 		signal = data('mysql_octets.rx', filter=filter('plugin', 'mysql') and (not filter('aws_state', '{Code: 32,Name: shutting-down', '{Code: 48,Name: terminated}', '{Code: 62,Name: stopping}', '{Code: 80,Name: stopped}')) and (not filter('gcp_status', '{Code=3, Name=STOPPING}', '{Code=4, Name=TERMINATED}')) and (not filter('azure_power_state', 'PowerState/stopping', 'PowerState/stoppped', 'PowerState/deallocating', 'PowerState/deallocated')) and ${module.filter-tags.filter_custom})
 		not_reporting.detector(stream=signal, resource_identifier=['host'], duration='${var.heartbeat_timeframe}').publish('CRIT')
-	EOF
+EOF
 
   rule {
     description           = "has not reported in ${var.heartbeat_timeframe}"
@@ -56,7 +56,7 @@ resource "signalfx_detector" "mysql_slow" {
 		signal = (A/B).scale(100).${var.mysql_slow_transformation_function}(over='${var.mysql_slow_transformation_window}')
 		detect(when(signal > ${var.mysql_slow_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.mysql_slow_threshold_warning}) and when(signal <= ${var.mysql_slow_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.mysql_slow_threshold_critical}"
@@ -86,7 +86,7 @@ resource "signalfx_detector" "mysql_pool_efficiency" {
 		signal = (A/B).scale(100).${var.mysql_pool_efficiency_transformation_function}(over='${var.mysql_pool_efficiency_transformation_window}')
 		detect(when(signal > ${var.mysql_pool_efficiency_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.mysql_pool_efficiency_threshold_warning}) and when(signal <= ${var.mysql_pool_efficiency_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.mysql_pool_efficiency_threshold_critical}"
@@ -116,7 +116,7 @@ resource "signalfx_detector" "mysql_pool_utilization" {
 		signal = ((B-A)/B*100).${var.mysql_pool_utilization_transformation_function}(over='${var.mysql_pool_utilization_transformation_window}')
 		detect(when(signal > ${var.mysql_pool_utilization_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.mysql_pool_utilization_threshold_warning}) and when(signal <= ${var.mysql_pool_utilization_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.mysql_pool_utilization_threshold_critical}"
@@ -144,7 +144,7 @@ resource "signalfx_detector" "mysql_threads_anomaly" {
 		from signalfx.detectors.against_periods import against_periods
 		signal = data('threads.running', filter=filter('plugin', 'mysql') and ${module.filter-tags.filter_custom})${var.mysql_threads_anomaly_aggregation_function}.${var.mysql_threads_anomaly_transformation_function}(over='${var.mysql_threads_anomaly_transformation_window}').publish('signal')
 		against_periods.detector_growth_rate(signal, window_to_compare=duration('${var.mysql_threads_anomaly_window_to_compare}'), space_between_windows=duration('${var.mysql_threads_anomaly_space_between_windows}'), num_windows=${var.mysql_threads_anomaly_num_windows}, fire_growth_rate_threshold=${var.mysql_threads_anomaly_fire_growth_rate_threshold}, clear_growth_rate_threshold=${var.mysql_threads_anomaly_clear_growth_rate_threshold}, discard_historical_outliers=True, orientation='${var.mysql_threads_anomaly_orientation}').publish('CRIT')
-	EOF
+EOF
 
   rule {
     description           = " rate > ${var.mysql_threads_anomaly_fire_growth_rate_threshold}"
@@ -164,7 +164,7 @@ resource "signalfx_detector" "mysql_questions_anomaly" {
 		from signalfx.detectors.against_periods import against_periods
 		signal = data('mysql_commands.*', filter=filter('plugin', 'mysql') and ${module.filter-tags.filter_custom}).sum(by=['host'])${var.mysql_questions_anomaly_aggregation_function}.${var.mysql_questions_anomaly_transformation_function}(over='${var.mysql_questions_anomaly_transformation_window}').publish('signal')
 		against_periods.detector_growth_rate(signal, window_to_compare=duration('${var.mysql_questions_anomaly_window_to_compare}'), space_between_windows=duration('${var.mysql_questions_anomaly_space_between_windows}'), num_windows=${var.mysql_questions_anomaly_num_windows}, fire_growth_rate_threshold=${var.mysql_questions_anomaly_fire_growth_rate_threshold}, clear_growth_rate_threshold=${var.mysql_questions_anomaly_clear_growth_rate_threshold}, discard_historical_outliers=True, orientation='${var.mysql_questions_anomaly_orientation}').publish('CRIT')
-	EOF
+EOF
 
   rule {
     description           = " rate > ${var.mysql_questions_anomaly_fire_growth_rate_threshold}"
@@ -214,7 +214,7 @@ resource "signalfx_detector" "mysql_replication_status" {
 		signal = (A+B).${var.mysql_replication_status_transformation_function}(over='${var.mysql_replication_status_transformation_window}')
 		detect(when(signal > 0) and when(signal < 2)).publish('WARN')
 		detect(when(signal < 1)).publish('CRIT')
-	EOF
+EOF
 
   rule {
     description           = " is fully stopped"

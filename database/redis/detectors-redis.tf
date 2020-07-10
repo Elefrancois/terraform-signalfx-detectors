@@ -5,7 +5,7 @@ resource "signalfx_detector" "heartbeat" {
 		from signalfx.detectors.not_reporting import not_reporting
 		signal = data('bytes.used_memory', filter=filter('plugin', 'redis_info') and (not filter('aws_state', '{Code: 32,Name: shutting-down', '{Code: 48,Name: terminated}', '{Code: 62,Name: stopping}', '{Code: 80,Name: stopped}')) and (not filter('gcp_status', '{Code=3, Name=STOPPING}', '{Code=4, Name=TERMINATED}')) and (not filter('azure_power_state', 'PowerState/stopping', 'PowerState/stoppped', 'PowerState/deallocating', 'PowerState/deallocated')) and ${module.filter-tags.filter_custom})
 		not_reporting.detector(stream=signal, resource_identifier=['plugin_instance'], duration='${var.heartbeat_timeframe}').publish('CRIT')
-	EOF
+EOF
 
   rule {
     description           = "has not reported in ${var.heartbeat_timeframe}"
@@ -24,7 +24,7 @@ resource "signalfx_detector" "evicted_keys" {
 		signal = data('counter.evicted_keys', filter=filter('plugin', 'redis_info') and ${module.filter-tags.filter_custom})${var.evicted_keys_aggregation_function}.${var.evicted_keys_transformation_function}(over='${var.evicted_keys_transformation_window}').publish('signal')
 		detect(when(signal > ${var.evicted_keys_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.evicted_keys_threshold_warning}) and when(signal <= ${var.evicted_keys_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "are too high > ${var.evicted_keys_threshold_critical}"
@@ -52,7 +52,7 @@ resource "signalfx_detector" "expirations" {
 		signal = data('counter.expired_keys', filter=filter('plugin', 'redis_info') and ${module.filter-tags.filter_custom})${var.expirations_aggregation_function}.${var.expirations_transformation_function}(over='${var.expirations_transformation_window}').publish('signal')
 		detect(when(signal > ${var.expirations_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.expirations_threshold_warning}) and when(signal <= ${var.expirations_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "are too high > ${var.expirations_threshold_critical}"
@@ -82,7 +82,7 @@ resource "signalfx_detector" "blocked_clients" {
 		signal = ((A/B)*100).${var.blocked_clients_transformation_function}(over='${var.blocked_clients_transformation_window}').publish('signal')
 		detect(when(signal > ${var.blocked_clients_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.blocked_clients_threshold_warning}) and when(signal <= ${var.blocked_clients_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.blocked_clients_threshold_critical}"
@@ -113,7 +113,7 @@ resource "signalfx_detector" "keyspace_full" {
 		signal = (A-B).abs().${var.keyspace_full_transformation_function}(over='${var.keyspace_full_transformation_window}').publish(label='signal')
 		detect(when(signal <= ${var.keyspace_full_threshold_critical})).publish('CRIT')
 		detect(when(signal < ${var.keyspace_full_threshold_warning}) and when(signal > ${var.keyspace_full_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = " change <= ${var.keyspace_full_threshold_critical}"
@@ -143,7 +143,7 @@ resource "signalfx_detector" "memory_used" {
 		signal = ((A/B)*100).${var.memory_used_transformation_function}(over='${var.memory_used_transformation_window}').publish('signal')
 		detect(when(signal > ${var.memory_used_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.memory_used_threshold_warning}) and when(signal <= ${var.memory_used_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.memory_used_threshold_critical}"
@@ -172,7 +172,7 @@ resource "signalfx_detector" "memory_frag" {
 		signal = (A*100).${var.memory_frag_transformation_function}(over='${var.memory_frag_transformation_window}').publish('signal')
 		detect(when(signal > ${var.memory_frag_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.memory_frag_threshold_warning}) and when(signal <= ${var.memory_frag_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.memory_frag_threshold_critical}"
@@ -200,7 +200,7 @@ resource "signalfx_detector" "rejected_connections" {
 		signal = data('counter.rejected_connections', filter=filter('plugin', 'redis_info') and ${module.filter-tags.filter_custom})${var.rejected_connections_aggregation_function}.${var.rejected_connections_transformation_function}(over='${var.rejected_connections_transformation_window}').publish('signal')
 		detect(when(signal > ${var.rejected_connections_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.rejected_connections_threshold_warning}) and when(signal <= ${var.rejected_connections_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "are too high > ${var.rejected_connections_threshold_critical}"
@@ -230,7 +230,7 @@ resource "signalfx_detector" "hitrate" {
 		signal = ((A/(A+B))*100).${var.hitrate_transformation_function}(over='${var.hitrate_transformation_window}').publish('signal')
 		detect(when(signal < ${var.hitrate_threshold_critical})).publish('CRIT')
 		detect(when(signal < ${var.hitrate_threshold_warning}) and when(signal >= ${var.hitrate_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too low < ${var.hitrate_threshold_critical}"

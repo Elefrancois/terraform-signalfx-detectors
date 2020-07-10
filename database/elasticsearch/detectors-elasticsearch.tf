@@ -5,7 +5,7 @@ resource "signalfx_detector" "heartbeat" {
 		from signalfx.detectors.not_reporting import not_reporting
 		signal = data('elasticsearch.cluster.status', filter=filter('plugin', 'elasticsearch') and (not filter('aws_state', '{Code: 32,Name: shutting-down', '{Code: 48,Name: terminated}', '{Code: 62,Name: stopping}', '{Code: 80,Name: stopped}')) and (not filter('gcp_status', '{Code=3, Name=STOPPING}', '{Code=4, Name=TERMINATED}')) and (not filter('azure_power_state', 'PowerState/stopping', 'PowerState/stoppped', 'PowerState/deallocating', 'PowerState/deallocated')) and ${module.filter-tags.filter_custom}).publish('signal')
 		not_reporting.detector(stream=signal, resource_identifier=['host'], duration='${var.heartbeat_timeframe}').publish('CRIT')
-	EOF
+EOF
 
   rule {
     description           = "has not reported in ${var.heartbeat_timeframe}"
@@ -24,7 +24,7 @@ resource "signalfx_detector" "cluster_status_not_green" {
 		signal = data('elasticsearch.cluster.status', filter=filter('plugin', 'elasticsearch') and ${module.filter-tags.filter_custom})${var.cluster_status_not_green_aggregation_function}.${var.cluster_status_not_green_transformation_function}(over='${var.cluster_status_not_green_transformation_window}').publish('signal')
 		detect(when(signal >= ${var.cluster_status_not_green_threshold_critical})).publish('CRIT')
 		detect(when(signal >= ${var.cluster_status_not_green_threshold_warning}) and when(signal <= ${var.cluster_status_not_green_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is above critical capacity >= ${var.cluster_status_not_green_threshold_critical}"
@@ -53,7 +53,7 @@ resource "signalfx_detector" "cluster_initializing_shards" {
 		signal = data('elasticsearch.cluster.initializing-shards', filter=filter('plugin', 'elasticsearch') and ${module.filter-tags.filter_custom})${var.cluster_initializing_shards_aggregation_function}.${var.cluster_initializing_shards_transformation_function}(over='${var.cluster_initializing_shards_transformation_window}').publish('signal')
 		detect(when(signal > ${var.cluster_initializing_shards_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.cluster_initializing_shards_threshold_warning}) and when(signal <= ${var.cluster_initializing_shards_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.cluster_initializing_shards_threshold_critical}"
@@ -82,7 +82,7 @@ resource "signalfx_detector" "cluster_relocating_shards" {
 		signal = data('elasticsearch.cluster.relocating-shards', filter=filter('plugin', 'elasticsearch') and ${module.filter-tags.filter_custom})${var.cluster_relocating_shards_aggregation_function}.${var.cluster_relocating_shards_transformation_function}(over='${var.cluster_relocating_shards_transformation_window}').publish('signal')
 		detect(when(signal > ${var.cluster_relocating_shards_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.cluster_relocating_shards_threshold_warning}) and when(signal <= ${var.cluster_relocating_shards_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.cluster_relocating_shards_threshold_critical}"
@@ -111,7 +111,7 @@ resource "signalfx_detector" "cluster_unassigned_shards" {
 		signal = data('elasticsearch.cluster.unassigned-shards', filter=filter('plugin', 'elasticsearch') and ${module.filter-tags.filter_custom})${var.cluster_unassigned_shards_aggregation_function}.${var.cluster_unassigned_shards_transformation_function}(over='${var.cluster_unassigned_shards_transformation_window}').publish('signal')
 		detect(when(signal > ${var.cluster_unassigned_shards_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.cluster_unassigned_shards_threshold_warning}) and when(signal <= ${var.cluster_unassigned_shards_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "are too high > ${var.cluster_unassigned_shards_threshold_critical}"
@@ -140,7 +140,7 @@ resource "signalfx_detector" "jvm_heap_memory_usage" {
 		signal = data('elasticsearch.jvm.mem.heap-used', filter=filter('plugin', 'elasticsearch') and ${module.filter-tags.filter_custom})${var.jvm_heap_memory_usage_aggregation_function}.${var.jvm_heap_memory_usage_transformation_function}(over='${var.jvm_heap_memory_usage_transformation_window}').publish('signal')
 		detect(when(signal > ${var.jvm_heap_memory_usage_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.jvm_heap_memory_usage_threshold_warning}) and when(signal <= ${var.jvm_heap_memory_usage_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.jvm_heap_memory_usage_threshold_critical}"
@@ -171,7 +171,7 @@ resource "signalfx_detector" "jvm_memory_young_usage" {
 		signal = (A/B).scale(100).${var.jvm_memory_young_usage_transformation_function}(over='${var.jvm_memory_young_usage_transformation_window}').publish('signal')
 		detect(when(signal > ${var.jvm_memory_young_usage_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.jvm_memory_young_usage_threshold_warning}) and when(signal <= ${var.jvm_memory_young_usage_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.jvm_memory_young_usage_threshold_critical}"
@@ -202,7 +202,7 @@ resource "signalfx_detector" "jvm_memory_old_usage" {
 		signal = (A/B).scale(100).${var.jvm_memory_old_usage_transformation_function}(over='${var.jvm_memory_old_usage_transformation_window}').publish('signal')
 		detect(when(signal > ${var.jvm_memory_old_usage_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.jvm_memory_old_usage_threshold_warning}) and when(signal <= ${var.jvm_memory_old_usage_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.jvm_memory_old_usage_threshold_critical}"
@@ -234,7 +234,7 @@ resource "signalfx_detector" "jvm_gc_old_collection_latency" {
 		signal = (A/B).scale(1000).${var.jvm_gc_old_collection_latency_transformation_function}(over='${var.jvm_gc_old_collection_latency_transformation_window}').publish('signal')
 		aperiodic.above_or_below_detector(signal, ${var.jvm_gc_old_collection_latency_threshold_critical}, 'above', lasting('${var.jvm_gc_old_collection_latency_aperiodic_duration}', ${var.jvm_gc_old_collection_latency_aperiodic_percentage})).publish('CRIT')
 		aperiodic.range_detector(signal, ${var.jvm_gc_old_collection_latency_threshold_warning}, ${var.jvm_gc_old_collection_latency_threshold_critical}, 'within_range', lasting('${var.jvm_gc_old_collection_latency_aperiodic_duration}', ${var.jvm_gc_old_collection_latency_aperiodic_percentage}), upper_strict=False).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.jvm_gc_old_collection_latency_threshold_critical}"
@@ -266,7 +266,7 @@ resource "signalfx_detector" "jvm_gc_young_collection_latency" {
 		signal = (A/B).scale(1000).${var.jvm_gc_young_collection_latency_transformation_function}(over='${var.jvm_gc_young_collection_latency_transformation_window}').publish('signal')
 		aperiodic.above_or_below_detector(signal, ${var.jvm_gc_young_collection_latency_threshold_critical}, 'above', lasting('${var.jvm_gc_young_collection_latency_aperiodic_duration}', ${var.jvm_gc_young_collection_latency_aperiodic_percentage})).publish('CRIT')
 		aperiodic.range_detector(signal, ${var.jvm_gc_young_collection_latency_threshold_warning}, ${var.jvm_gc_young_collection_latency_threshold_critical}, 'within_range', lasting('${var.jvm_gc_young_collection_latency_aperiodic_duration}', ${var.jvm_gc_young_collection_latency_aperiodic_percentage}), upper_strict=False).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.jvm_gc_young_collection_latency_threshold_critical}"
@@ -298,7 +298,7 @@ resource "signalfx_detector" "indexing_latency" {
 		signal = (A/B).scale(1000).${var.indexing_latency_transformation_function}(over='${var.indexing_latency_transformation_window}').publish('signal')
 		aperiodic.above_or_below_detector(signal, ${var.indexing_latency_threshold_critical}, 'above', lasting('${var.indexing_latency_aperiodic_duration}', ${var.indexing_latency_aperiodic_percentage})).publish('CRIT')
 		aperiodic.range_detector(signal, ${var.indexing_latency_threshold_warning}, ${var.indexing_latency_threshold_critical}, 'within_range', lasting('${var.indexing_latency_aperiodic_duration}', ${var.indexing_latency_aperiodic_percentage}), upper_strict=False).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.indexing_latency_threshold_critical}"
@@ -330,7 +330,7 @@ resource "signalfx_detector" "flush_latency" {
 		signal = (A/B).scale(1000).${var.flush_latency_transformation_function}(over='${var.flush_latency_transformation_window}').publish('signal')
 		aperiodic.above_or_below_detector(signal, ${var.flush_latency_threshold_critical}, 'above', lasting('${var.flush_latency_aperiodic_duration}', ${var.flush_latency_aperiodic_percentage})).publish('CRIT')
 		aperiodic.range_detector(signal, ${var.flush_latency_threshold_warning}, ${var.flush_latency_threshold_critical}, 'within_range', lasting('${var.flush_latency_aperiodic_duration}', ${var.flush_latency_aperiodic_percentage}), upper_strict=False).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.flush_latency_threshold_critical}"
@@ -359,7 +359,7 @@ resource "signalfx_detector" "http_connections_anomaly" {
 		from signalfx.detectors.against_periods import against_periods
 		signal = data('elasticsearch.http.current_open', filter=filter('plugin', 'elasticsearch') and ${module.filter-tags.filter_custom})${var.http_connections_anomaly_aggregation_function}.${var.http_connections_anomaly_transformation_function}(over='${var.http_connections_anomaly_transformation_window}').publish('signal')
 		against_periods.detector_growth_rate(signal, window_to_compare=duration('${var.http_connections_anomaly_window_to_compare}'), space_between_windows=duration('${var.http_connections_anomaly_space_between_windows}'), num_windows=${var.http_connections_anomaly_num_windows}, fire_growth_rate_threshold=${var.http_connections_anomaly_fire_growth_rate_threshold}, clear_growth_rate_threshold=${var.http_connections_anomaly_clear_growth_rate_threshold}, discard_historical_outliers=True, orientation='${var.http_connections_anomaly_orientation}').publish('CRIT')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.http_connections_anomaly_threshold_critical}"
@@ -382,7 +382,7 @@ resource "signalfx_detector" "search_query_latency" {
 		signal = (A/B).scale(1000).${var.search_query_latency_transformation_function}(over='${var.search_query_latency_transformation_window}').publish('signal')
 		aperiodic.above_or_below_detector(signal, ${var.search_query_latency_threshold_critical}, 'above', lasting('${var.search_query_latency_aperiodic_duration}', ${var.search_query_latency_aperiodic_percentage})).publish('CRIT')
 		aperiodic.range_detector(signal, ${var.search_query_latency_threshold_warning}, ${var.search_query_latency_threshold_critical}, 'within_range', lasting('${var.search_query_latency_aperiodic_duration}', ${var.search_query_latency_aperiodic_percentage}), upper_strict=False).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.search_query_latency_threshold_critical}"
@@ -413,7 +413,7 @@ resource "signalfx_detector" "fetch_latency" {
 		signal = (A/B).scale(1000).${var.fetch_latency_transformation_function}(over='${var.fetch_latency_transformation_window}').publish('signal')
 		aperiodic.above_or_below_detector(signal, ${var.fetch_latency_threshold_critical}, 'above', lasting('${var.fetch_latency_aperiodic_duration}', ${var.fetch_latency_aperiodic_percentage})).publish('CRIT')
 		aperiodic.range_detector(signal, ${var.fetch_latency_threshold_warning}, ${var.fetch_latency_threshold_critical}, 'within_range', lasting('${var.fetch_latency_aperiodic_duration}', ${var.fetch_latency_aperiodic_percentage}), upper_strict=False).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.fetch_latency_threshold_critical}"
@@ -443,7 +443,7 @@ resource "signalfx_detector" "search_query_change" {
 		signal = ((B-A)/B*100).${var.search_query_change_transformation_function}(over='${var.search_query_change_transformation_window}').publish('signal')
 		detect(when(signal >= ${var.search_query_change_threshold_critical})).publish('CRIT')
 		detect(when(signal >= ${var.search_query_change_threshold_warning}) and when(signal <= ${var.search_query_change_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high >= ${var.search_query_change_threshold_critical}"
@@ -474,7 +474,7 @@ resource "signalfx_detector" "fetch_change" {
 		signal = ((B-A)/B*100).${var.fetch_change_transformation_function}(over='${var.fetch_change_transformation_window}').publish('signal')
 		detect(when(signal >= ${var.fetch_change_threshold_critical})).publish('CRIT')
 		detect(when(signal >= ${var.fetch_change_threshold_warning}) and when(signal <= ${var.fetch_change_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high >= ${var.fetch_change_threshold_critical}"
@@ -505,7 +505,7 @@ resource "signalfx_detector" "field_data_evictions_change" {
 		signal = (A-B).${var.field_data_evictions_change_transformation_function}(over='${var.field_data_evictions_change_transformation_window}').publish('signal')
 		detect(when(signal > ${var.field_data_evictions_change_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.field_data_evictions_change_threshold_warning}) and when(signal <= ${var.field_data_evictions_change_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.field_data_evictions_change_threshold_critical}"
@@ -536,7 +536,7 @@ resource "signalfx_detector" "query_cache_evictions_change" {
 		signal = (A-B).${var.query_cache_evictions_change_transformation_function}(over='${var.query_cache_evictions_change_transformation_window}').publish('signal')
 		detect(when(signal > ${var.query_cache_evictions_change_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.query_cache_evictions_change_threshold_warning}) and when(signal <= ${var.query_cache_evictions_change_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.query_cache_evictions_change_threshold_critical}"
@@ -567,7 +567,7 @@ resource "signalfx_detector" "request_cache_evictions_change" {
 		signal = (A-B).${var.request_cache_evictions_change_transformation_function}(over='${var.request_cache_evictions_change_transformation_window}').publish('signal')
 		detect(when(signal > ${var.request_cache_evictions_change_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.request_cache_evictions_change_threshold_warning}) and when(signal <= ${var.request_cache_evictions_change_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.request_cache_evictions_change_threshold_critical}"
@@ -598,7 +598,7 @@ resource "signalfx_detector" "task_time_in_queue_change" {
 		signal = (A-B).${var.task_time_in_queue_change_transformation_function}(over='${var.task_time_in_queue_change_transformation_window}').publish('signal')
 		detect(when(signal > ${var.task_time_in_queue_change_threshold_critical})).publish('CRIT')
 		detect(when(signal > ${var.task_time_in_queue_change_threshold_warning}) and when(signal <= ${var.task_time_in_queue_change_threshold_critical})).publish('WARN')
-	EOF
+EOF
 
   rule {
     description           = "is too high > ${var.task_time_in_queue_change_threshold_critical}"

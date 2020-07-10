@@ -5,7 +5,7 @@ resource "signalfx_detector" "heartbeat" {
 		from signalfx.detectors.not_reporting import not_reporting
 		signal = data('postgres_database_size', filter=filter('plugin', 'postgresql') and (not filter('aws_state', '{Code: 32,Name: shutting-down', '{Code: 48,Name: terminated}', '{Code: 62,Name: stopping}', '{Code: 80,Name: stopped}')) and (not filter('gcp_status', '{Code=3, Name=STOPPING}', '{Code=4, Name=TERMINATED}')) and (not filter('azure_power_state', 'PowerState/stopping', 'PowerState/stoppped', 'PowerState/deallocating', 'PowerState/deallocated')) and ${module.filter-tags.filter_custom})
 		not_reporting.detector(stream=signal, resource_identifier=['host'], duration='${var.heartbeat_timeframe}').publish('CRIT')
-  EOF
+EOF
 
   rule {
     description           = "has not reported in ${var.heartbeat_timeframe}"
@@ -27,7 +27,7 @@ resource "signalfx_detector" "too_many_locks" {
 		ON_Condition_WARN = conditions.generic_condition(signal, ${var.too_many_locks_threshold_warning}, ${var.too_many_locks_threshold_critical}, 'within_range', lasting('${var.too_many_locks_aperiodic_duration}', ${var.too_many_locks_aperiodic_percentage}), 'observed', strict_2=False)
 		detect(ON_Condition_CRIT, off=when(signal is None, '${var.too_many_locks_clear_duration}')).publish('CRIT')
 		detect(ON_Condition_WARN, off=when(signal is None, '${var.too_many_locks_clear_duration}')).publish('WARN')
-  EOF
+EOF
 
   rule {
     description           = "are too high > ${var.too_many_locks_threshold_critical}"
