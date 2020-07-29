@@ -76,12 +76,6 @@ variable "total_requests_notifications" {
   default     = []
 }
 
-variable "total_requests_notifications_warning" {
-  description = "Notification recipients list for warning alerting rule of total_requests detector"
-  type        = list(string)
-  default     = []
-}
-
 variable "total_requests_notifications_critical" {
   description = "Notification recipients list for critical alerting rule of total_requests detector"
   type        = list(string)
