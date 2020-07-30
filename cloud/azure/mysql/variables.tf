@@ -100,13 +100,7 @@ variable "cpu_usage_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "cpu_usage_transformation_function" {
-  description = "Transformation function for cpu_usage detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "cpu_usage_transformation_window" {
+variable "cpu_usage_timer" {
   description = "Transformation window for cpu_usage detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "15m"
@@ -168,13 +162,7 @@ variable "free_storage_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "free_storage_transformation_function" {
-  description = "Transformation function for free_storage detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "free_storage_transformation_window" {
+variable "free_storage_timer" {
   description = "Transformation window for free_storage detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "15m"
@@ -236,13 +224,7 @@ variable "io_consumption_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "io_consumption_transformation_function" {
-  description = "Transformation function for io_consumption detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "io_consumption_transformation_window" {
+variable "io_consumption_timer" {
   description = "Transformation window for io_consumption detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "15m"
@@ -304,13 +286,7 @@ variable "memory_usage_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "memory_usage_transformation_function" {
-  description = "Transformation function for memory_usage detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "memory_usage_transformation_window" {
+variable "memory_usage_timer" {
   description = "Transformation window for memory_usage detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "15m"
