@@ -100,14 +100,8 @@ variable "db_4xx_requests_aggregation_function" {
   default     = ".sum(by=['databasename', 'collectionname', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "db_4xx_requests_transformation_function" {
-  description = "Transformation function for db_4xx_requests detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "db_4xx_requests_transformation_window" {
-  description = "Transformation window for db_4xx_requests detector (i.e. 5m, 20m, 1h, 1d)"
+variable "db_4xx_requests_timer" {
+  description = "Evaluation window for db_4xx_requests detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -122,18 +116,6 @@ variable "db_4xx_requests_threshold_warning" {
   description = "Warning threshold for db_4xx_requests detector"
   type        = number
   default     = 50
-}
-
-variable "db_4xx_requests_aperiodic_duration" {
-  description = "Duration for the db_4xx_requests block"
-  type        = string
-  default     = "10m"
-}
-
-variable "db_4xx_requests_aperiodic_percentage" {
-  description = "Percentage for the db_4xx_requests block"
-  type        = number
-  default     = 0.9
 }
 
 # db_5xx_requests detectors
@@ -180,14 +162,8 @@ variable "db_5xx_requests_aggregation_function" {
   default     = ".sum(by=['databasename', 'collectionname', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "db_5xx_requests_transformation_function" {
-  description = "Transformation function for db_5xx_requests detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "db_5xx_requests_transformation_window" {
-  description = "Transformation window for db_5xx_requests detector (i.e. 5m, 20m, 1h, 1d)"
+variable "db_5xx_requests_timer" {
+  description = "Evaluation window for db_5xx_requests detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -202,18 +178,6 @@ variable "db_5xx_requests_threshold_warning" {
   description = "Warning threshold for db_5xx_requests detector"
   type        = number
   default     = 50
-}
-
-variable "db_5xx_requests_aperiodic_duration" {
-  description = "Duration for the db_5xx_requests block"
-  type        = string
-  default     = "10m"
-}
-
-variable "db_5xx_requests_aperiodic_percentage" {
-  description = "Percentage for the db_5xx_requests block"
-  type        = number
-  default     = 0.9
 }
 
 # Scaling detectors
@@ -260,14 +224,8 @@ variable "scaling_aggregation_function" {
   default     = ".sum(by=['databasename', 'collectionname', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "scaling_transformation_function" {
-  description = "Transformation function for scaling detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "scaling_transformation_window" {
-  description = "Transformation window for scaling detector (i.e. 5m, 20m, 1h, 1d)"
+variable "scaling_timer" {
+  description = "Evaluation window for scaling detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -282,16 +240,4 @@ variable "scaling_threshold_warning" {
   description = "Warning threshold for scaling detector"
   type        = number
   default     = 5
-}
-
-variable "scaling_aperiodic_duration" {
-  description = "Duration for the scaling block"
-  type        = string
-  default     = "10m"
-}
-
-variable "scaling_aperiodic_percentage" {
-  description = "Percentage for the scaling block"
-  type        = number
-  default     = 0.9
 }
