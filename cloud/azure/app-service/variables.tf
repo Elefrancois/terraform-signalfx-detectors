@@ -100,14 +100,8 @@ variable "response_time_aggregation_function" {
   default     = ".mean(by=['Instance', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "response_time_transformation_function" {
-  description = "Transformation function for response_time detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "response_time_transformation_window" {
-  description = "Transformation window for response_time detector (i.e. 5m, 20m, 1h, 1d)"
+variable "response_time_timer" {
+  description = "Evaluation window for response_time detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -168,14 +162,8 @@ variable "memory_usage_count_aggregation_function" {
   default     = ".mean(by=['Instance', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "memory_usage_count_transformation_function" {
-  description = "Transformation function for memory_usage_count detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "memory_usage_count_transformation_window" {
-  description = "Transformation window for memory_usage_count detector (i.e. 5m, 20m, 1h, 1d)"
+variable "memory_usage_count_timer" {
+  description = "Evaluation window for memory_usage_count detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -236,14 +224,8 @@ variable "http_5xx_errors_count_aggregation_function" {
   default     = ".mean(by=['Instance', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "http_5xx_errors_count_transformation_function" {
-  description = "Transformation function for http_5xx_errors_count detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "http_5xx_errors_count_transformation_window" {
-  description = "Transformation window for http_5xx_errors_count detector (i.e. 5m, 20m, 1h, 1d)"
+variable "http_5xx_errors_count_timer" {
+  description = "Evaluation window for http_5xx_errors_count detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -304,14 +286,8 @@ variable "http_4xx_errors_count_aggregation_function" {
   default     = ".mean(by=['Instance', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "http_4xx_errors_count_transformation_function" {
-  description = "Transformation function for http_4xx_errors_count detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "http_4xx_errors_count_transformation_window" {
-  description = "Transformation window for http_4xx_errors_count detector (i.e. 5m, 20m, 1h, 1d)"
+variable "http_4xx_errors_count_timer" {
+  description = "Evaluation window for http_4xx_errors_count detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -372,14 +348,8 @@ variable "http_success_status_rate_aggregation_function" {
   default     = ".mean(by=['Instance', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "http_success_status_rate_transformation_function" {
-  description = "Transformation function for http_success_status_rate detector (mean, min, max)"
-  type        = string
-  default     = "max"
-}
-
-variable "http_success_status_rate_transformation_window" {
-  description = "Transformation window for http_success_status_rate detector (i.e. 5m, 20m, 1h, 1d)"
+variable "http_success_status_rate_timer" {
+  description = "Evaluation window for http_success_status_rate detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
