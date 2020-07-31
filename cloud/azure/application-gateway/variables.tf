@@ -88,14 +88,8 @@ variable "total_requests_aggregation_function" {
   default     = ".sum(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "total_requests_transformation_function" {
-  description = "Transformation function for total_requests detector (mean, min, max)"
-  type        = string
-  default     = "max"
-}
-
-variable "total_requests_transformation_window" {
-  description = "Transformation window for total_requests detector (i.e. 5m, 20m, 1h, 1d)"
+variable "total_requests_timer" {
+  description = "Evaluation window for total_requests detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -144,14 +138,8 @@ variable "backend_connect_time_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region', 'backendhttpsetting', 'backendpool', 'backendserver'])"
 }
 
-variable "backend_connect_time_transformation_function" {
-  description = "Transformation function for backend_connect_time detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "backend_connect_time_transformation_window" {
-  description = "Transformation window for backend_connect_time detector (i.e. 5m, 20m, 1h, 1d)"
+variable "backend_connect_time_timer" {
+  description = "Evaluation window for backend_connect_time detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -212,14 +200,8 @@ variable "failed_requests_aggregation_function" {
   default     = ".sum(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region', 'backendsettingspool'])"
 }
 
-variable "failed_requests_transformation_function" {
-  description = "Transformation function for failed_requests detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "failed_requests_transformation_window" {
-  description = "Transformation window for failed_requests detector (i.e. 5m, 20m, 1h, 1d)"
+variable "failed_requests_timer" {
+  description = "Evaluation window for failed_requests detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -280,14 +262,8 @@ variable "unhealthy_host_ratio_aggregation_function" {
   default     = ".sum(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region', 'backendsettingspool'])"
 }
 
-variable "unhealthy_host_ratio_transformation_function" {
-  description = "Transformation function for unhealthy_host_ratio detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "unhealthy_host_ratio_transformation_window" {
-  description = "Transformation window for unhealthy_host_ratio detector (i.e. 5m, 20m, 1h, 1d)"
+variable "unhealthy_host_ratio_timer" {
+  description = "Evaluation window for unhealthy_host_ratio detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -348,14 +324,8 @@ variable "http_4xx_errors_aggregation_function" {
   default     = ".sum(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "http_4xx_errors_transformation_function" {
-  description = "Transformation function for http_4xx_errors detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "http_4xx_errors_transformation_window" {
-  description = "Transformation window for http_4xx_errors detector (i.e. 5m, 20m, 1h, 1d)"
+variable "http_4xx_errors_timer" {
+  description = "Evaluation window for http_4xx_errors detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -416,14 +386,8 @@ variable "http_5xx_errors_aggregation_function" {
   default     = ".sum(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "http_5xx_errors_transformation_function" {
-  description = "Transformation function for http_5xx_errors detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "http_5xx_errors_transformation_window" {
-  description = "Transformation window for http_5xx_errors detector (i.e. 5m, 20m, 1h, 1d)"
+variable "http_5xx_errors_timer" {
+  description = "Evaluation window for http_5xx_errors detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -484,14 +448,8 @@ variable "backend_http_4xx_errors_aggregation_function" {
   default     = ".sum(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region', 'backendhttpsetting', 'backendpool', 'backendserver'])"
 }
 
-variable "backend_http_4xx_errors_transformation_function" {
-  description = "Transformation function for backend_http_4xx_errors detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "backend_http_4xx_errors_transformation_window" {
-  description = "Transformation window for backend_http_4xx_errors detector (i.e. 5m, 20m, 1h, 1d)"
+variable "backend_http_4xx_errors_timer" {
+  description = "Evaluation window for backend_http_4xx_errors detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -552,14 +510,8 @@ variable "backend_http_5xx_errors_aggregation_function" {
   default     = ".sum(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region', 'backendhttpsetting', 'backendpool', 'backendserver'])"
 }
 
-variable "backend_http_5xx_errors_transformation_function" {
-  description = "Transformation function for backend_http_5xx_errors detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "backend_http_5xx_errors_transformation_window" {
-  description = "Transformation window for backend_http_5xx_errors detector (i.e. 5m, 20m, 1h, 1d)"
+variable "backend_http_5xx_errors_timer" {
+  description = "Evaluation window for backend_http_5xx_errors detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
