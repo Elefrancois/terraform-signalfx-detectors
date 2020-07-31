@@ -80,14 +80,8 @@ variable "api_result_aggregation_function" {
   default     = ".sum(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "api_result_transformation_function" {
-  description = "Transformation function for api_result detector (mean, min, max)"
-  type        = string
-  default     = "max"
-}
-
-variable "api_result_transformation_window" {
-  description = "Transformation window for api_result detector (i.e. 5m, 20m, 1h, 1d)"
+variable "api_result_timer" {
+  description = "Evaluation window for api_result detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -148,14 +142,8 @@ variable "api_latency_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "api_latency_transformation_function" {
-  description = "Transformation function for api_latency detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "api_latency_transformation_window" {
-  description = "Transformation window for api_latency detector (i.e. 5m, 20m, 1h, 1d)"
+variable "api_latency_timer" {
+  description = "Evaluation window for api_latency detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
