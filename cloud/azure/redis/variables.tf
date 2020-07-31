@@ -100,14 +100,8 @@ variable "evictedkeys_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "evictedkeys_transformation_function" {
-  description = "Transformation function for evictedkeys detector (mean, min, max)"
-  type        = string
-  default     = "mean"
-}
-
-variable "evictedkeys_transformation_window" {
-  description = "Transformation window for evictedkeys detector (i.e. 5m, 20m, 1h, 1d)"
+variable "evictedkeys_timer" {
+  description = "Evaluation window for evictedkeys detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -165,17 +159,11 @@ variable "percent_processor_time_notifications_critical" {
 variable "percent_processor_time_aggregation_function" {
   description = "Aggregation function and group by for percent_processor_time detector (i.e. \".mean(by=['host'])\")"
   type        = string
-  default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
+  default     = ".mean(by=['shardid', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "percent_processor_time_transformation_function" {
-  description = "Transformation function for percent_processor_time detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "percent_processor_time_transformation_window" {
-  description = "Transformation window for percent_processor_time detector (i.e. 5m, 20m, 1h, 1d)"
+variable "percent_processor_time_timer" {
+  description = "Evaluation window for percent_processor_time detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -233,17 +221,11 @@ variable "load_notifications_critical" {
 variable "load_aggregation_function" {
   description = "Aggregation function and group by for load detector (i.e. \".mean(by=['host'])\")"
   type        = string
-  default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
+  default     = ".mean(by=['shardid', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "load_transformation_function" {
-  description = "Transformation function for load detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "load_transformation_window" {
-  description = "Transformation window for load detector (i.e. 5m, 20m, 1h, 1d)"
+variable "load_timer" {
+  description = "Evaluation window for load detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }

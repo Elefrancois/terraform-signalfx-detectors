@@ -3,8 +3,9 @@ resource "signalfx_detector" "heartbeat" {
 
   program_text = <<-EOF
         from signalfx.detectors.not_reporting import not_reporting
-        signal = data('connectedclients', filter=filter('resource_type', 'Microsoft.Cache/redis') and filter('primary_aggregation_type', 'true') and ${module.filter-tags.filter_custom}).publish('signal')
-        not_reporting.detector(stream=signal, resource_identifier=['ShardId'], duration='${var.heartbeat_timeframe}').publish('CRIT')
+        base_filter = filter('resource_type', 'Microsoft.Cache/Redis') and filter('primary_aggregation_type', 'true')
+        signal = data('usedmemory', filter=base_filter and ${module.filter-tags.filter_custom}).publish('signal')
+        not_reporting.detector(stream=signal, resource_identifier=['shardid'], duration='${var.heartbeat_timeframe}').publish('CRIT')
     EOF
 
   rule {
@@ -18,12 +19,13 @@ resource "signalfx_detector" "heartbeat" {
 }
 
 resource "signalfx_detector" "evictedkeys" {
-  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure Redis evictedkeys"
+  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure Redis evicted keys"
 
   program_text = <<-EOF
-        signal = data('evictedkeys', filter=filter('resource_type', 'Microsoft.Cache/redis') and filter('primary_aggregation_type', 'true') and ${module.filter-tags.filter_custom})${var.evictedkeys_aggregation_function}.${var.evictedkeys_transformation_function}(over='${var.evictedkeys_transformation_window}').publish('signal')
-        detect(when(signal > ${var.evictedkeys_threshold_critical})).publish('CRIT')
-        detect(when(signal > ${var.evictedkeys_threshold_warning}) and when(signal <= ${var.evictedkeys_threshold_critical})).publish('WARN')
+        base_filter = filter('resource_type', 'Microsoft.Cache/Redis') and filter('primary_aggregation_type', 'true')
+        signal = data('evictedkeys', filter=base_filter and ${module.filter-tags.filter_custom})${var.evictedkeys_aggregation_function}.publish('signal')
+        detect(when(signal > threshold(${var.evictedkeys_threshold_critical}), lasting="${var.evictedkeys_timer}")).publish('CRIT')
+        detect(when(signal > threshold(${var.evictedkeys_threshold_warning}), lasting="${var.evictedkeys_timer}") and when(signal <= ${var.evictedkeys_threshold_critical})).publish('WARN')
     EOF
 
   rule {
@@ -49,13 +51,14 @@ resource "signalfx_detector" "percent_processor_time" {
   name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure Redis processor time"
 
   program_text = <<-EOF
-        signal = data('percentProcessorTime', filter=filter('resource_type', 'Microsoft.Cache/redis') and filter('primary_aggregation_type', 'true') and ${module.filter-tags.filter_custom})${var.percent_processor_time_aggregation_function}.${var.percent_processor_time_transformation_function}(over='${var.percent_processor_time_transformation_window}').publish('signal')
-        detect(when(signal > ${var.percent_processor_time_threshold_critical})).publish('CRIT')
-        detect(when(signal > ${var.percent_processor_time_threshold_warning}) and when(signal <= ${var.percent_processor_time_threshold_critical})).publish('WARN')
+        base_filter = filter('resource_type', 'Microsoft.Cache/Redis') and filter('primary_aggregation_type', 'true')
+        signal = data('percentProcessorTime', filter=base_filter and ${module.filter-tags.filter_custom})${var.percent_processor_time_aggregation_function}.publish('signal')
+        detect(when(signal > threshold(${var.percent_processor_time_threshold_critical}), lasting="${var.percent_processor_time_timer}")).publish('CRIT')
+        detect(when(signal > threshold(${var.percent_processor_time_threshold_warning}), lasting="${var.percent_processor_time_timer}") and when(signal <= ${var.percent_processor_time_threshold_critical})).publish('WARN')
     EOF
 
   rule {
-    description           = "is too high > ${var.percent_processor_time_threshold_critical}"
+    description           = "is too high > ${var.percent_processor_time_threshold_critical}%"
     severity              = "Critical"
     detect_label          = "CRIT"
     disabled              = coalesce(var.percent_processor_time_disabled_critical, var.percent_processor_time_disabled, var.detectors_disabled)
@@ -64,7 +67,7 @@ resource "signalfx_detector" "percent_processor_time" {
   }
 
   rule {
-    description           = "is too high > ${var.percent_processor_time_threshold_warning}"
+    description           = "is too high > ${var.percent_processor_time_threshold_warning}%"
     severity              = "Warning"
     detect_label          = "WARN"
     disabled              = coalesce(var.percent_processor_time_disabled_warning, var.percent_processor_time_disabled, var.detectors_disabled)
@@ -77,13 +80,14 @@ resource "signalfx_detector" "load" {
   name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure Redis load"
 
   program_text = <<-EOF
-        signal = data('serverLoad', filter=filter('resource_type', 'Microsoft.Cache/redis') and filter('primary_aggregation_type', 'true') and ${module.filter-tags.filter_custom})${var.load_aggregation_function}.${var.load_transformation_function}(over='${var.load_transformation_window}').publish('signal')
-        detect(when(signal > ${var.load_threshold_critical})).publish('CRIT')
-        detect(when(signal > ${var.load_threshold_warning}) and when(signal <= ${var.load_threshold_critical})).publish('WARN')
+        base_filter = filter('resource_type', 'Microsoft.Cache/Redis') and filter('primary_aggregation_type', 'true')
+        signal = data('serverLoad', filter=base_filter and ${module.filter-tags.filter_custom})${var.load_aggregation_function}.publish('signal')
+        detect(when(signal > threshold(${var.load_threshold_critical}), lasting="${var.load_timer}")).publish('CRIT')
+        detect(when(signal > threshold(${var.load_threshold_warning}), lasting="${var.load_timer}") and when(signal <= ${var.load_threshold_critical})).publish('WARN')
     EOF
 
   rule {
-    description           = "is too high > ${var.load_threshold_critical}"
+    description           = "is too high > ${var.load_threshold_critical}%"
     severity              = "Critical"
     detect_label          = "CRIT"
     disabled              = coalesce(var.load_disabled_critical, var.load_disabled, var.detectors_disabled)
@@ -92,7 +96,7 @@ resource "signalfx_detector" "load" {
   }
 
   rule {
-    description           = "is too high > ${var.load_threshold_warning}"
+    description           = "is too high > ${var.load_threshold_warning}%"
     severity              = "Warning"
     detect_label          = "WARN"
     disabled              = coalesce(var.load_disabled_warning, var.load_disabled, var.detectors_disabled)
