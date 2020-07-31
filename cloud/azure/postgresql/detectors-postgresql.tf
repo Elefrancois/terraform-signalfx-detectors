@@ -23,9 +23,9 @@ resource "signalfx_detector" "cpu_usage" {
 
   program_text = <<-EOF
         base_filter = filter('resource_type', 'Microsoft.DBforPostgreSQL/servers') and filter('primary_aggregation_type', 'true')
-        signal = data('cpu_percent', filter=base_filter and ${module.filter-tags.filter_custom})${var.cpu_usage_aggregation_function}.${var.cpu_usage_transformation_function}(over='${var.cpu_usage_transformation_window}').publish('signal')
-        detect(when(signal > ${var.cpu_usage_threshold_critical})).publish('CRIT')
-        detect(when(signal > ${var.cpu_usage_threshold_warning}) and when(signal <= ${var.cpu_usage_threshold_critical})).publish('WARN')
+        signal = data('cpu_percent', filter=base_filter and ${module.filter-tags.filter_custom})${var.cpu_usage_aggregation_function}.publish('signal')
+        detect(when(signal > threshold(${var.cpu_usage_threshold_critical}), lasting="${var.cpu_usage_timer}")).publish('CRIT')
+        detect(when(signal > threshold(${var.cpu_usage_threshold_warning}), lasting="${var.cpu_usage_timer}") and when(signal <= ${var.cpu_usage_threshold_critical})).publish('WARN')
     EOF
 
   rule {
@@ -52,8 +52,8 @@ resource "signalfx_detector" "no_connection" {
 
   program_text = <<-EOF
         base_filter = filter('resource_type', 'Microsoft.DBforPostgreSQL/servers') and filter('primary_aggregation_type', 'true')
-        signal = data('active_connections', extrapolation="zero", filter=base_filter and ${module.filter-tags.filter_custom})${var.no_connection_aggregation_function}.${var.no_connection_transformation_function}(over='${var.no_connection_transformation_window}').publish('signal')
-        detect(when(signal < 1)).publish('CRIT')
+        signal = data('active_connections', extrapolation="zero", filter=base_filter and ${module.filter-tags.filter_custom})${var.no_connection_aggregation_function}.publish('signal')
+        detect(when(signal < threshold(1), lasting="${var.no_connection_timer}")).publish('CRIT')
     EOF
 
   rule {
@@ -71,9 +71,9 @@ resource "signalfx_detector" "free_storage" {
   program_text = <<-EOF
         base_filter = filter('resource_type', 'Microsoft.DBforPostgreSQL/servers') and filter('primary_aggregation_type', 'true')
         A = data('storage_percent', filter=base_filter and ${module.filter-tags.filter_custom})${var.free_storage_aggregation_function}
-        signal = (100-A).${var.free_storage_transformation_function}(over='${var.free_storage_transformation_window}').publish('signal')
-        detect(when(signal < ${var.free_storage_threshold_critical})).publish('CRIT')
-        detect(when(signal < ${var.free_storage_threshold_warning}) and when(signal >= ${var.free_storage_threshold_critical})).publish('WARN')
+        signal = (100-A).publish('signal')
+        detect(when(signal < threshold(${var.free_storage_threshold_critical}), lasting="${var.free_storage_timer}")).publish('CRIT')
+        detect(when(signal < threshold(${var.free_storage_threshold_warning}), lasting="${var.free_storage_timer}") and when(signal >= ${var.free_storage_threshold_critical})).publish('WARN')
     EOF
 
   rule {
@@ -100,9 +100,9 @@ resource "signalfx_detector" "io_consumption" {
 
   program_text = <<-EOF
         base_filter = filter('resource_type', 'Microsoft.DBforPostgreSQL/servers') and filter('primary_aggregation_type', 'true')
-        signal = data('io_consumption_percent', filter=base_filter and ${module.filter-tags.filter_custom})${var.io_consumption_aggregation_function}.${var.io_consumption_transformation_function}(over='${var.io_consumption_transformation_window}').publish('signal')
-        detect(when(signal > ${var.io_consumption_threshold_critical})).publish('CRIT')
-        detect(when(signal > ${var.io_consumption_threshold_warning}) and when(signal <= ${var.io_consumption_threshold_critical})).publish('WARN')
+        signal = data('io_consumption_percent', filter=base_filter and ${module.filter-tags.filter_custom})${var.io_consumption_aggregation_function}.publish('signal')
+        detect(when(signal > threshold(${var.io_consumption_threshold_critical}), lasting="${var.io_consumption_timer}")).publish('CRIT')
+        detect(when(signal > threshold(${var.io_consumption_threshold_warning}), lasting="${var.io_consumption_timer}") and when(signal <= ${var.io_consumption_threshold_critical})).publish('WARN')
     EOF
 
   rule {
@@ -129,9 +129,9 @@ resource "signalfx_detector" "memory_usage" {
 
   program_text = <<-EOF
         base_filter = filter('resource_type', 'Microsoft.DBforPostgreSQL/servers') and filter('primary_aggregation_type', 'true')
-        signal = data('memory_percent', filter=base_filter and ${module.filter-tags.filter_custom})${var.memory_usage_aggregation_function}.${var.memory_usage_transformation_function}(over='${var.memory_usage_transformation_window}').publish('signal')
-        detect(when(signal > ${var.memory_usage_threshold_critical})).publish('CRIT')
-        detect(when(signal > ${var.memory_usage_threshold_warning}) and when(signal <= ${var.memory_usage_threshold_critical})).publish('WARN')
+        signal = data('memory_percent', filter=base_filter and ${module.filter-tags.filter_custom})${var.memory_usage_aggregation_function}.publish('signal')
+        detect(when(signal > threshold(${var.memory_usage_threshold_critical}), lasting="${var.memory_usage_timer}")).publish('CRIT')
+        detect(when(signal > threshold(${var.memory_usage_threshold_warning}), lasting="${var.memory_usage_timer}") and when(signal <= ${var.memory_usage_threshold_critical})).publish('WARN')
     EOF
 
   rule {
