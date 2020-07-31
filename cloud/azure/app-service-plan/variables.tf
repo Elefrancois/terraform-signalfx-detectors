@@ -100,14 +100,8 @@ variable "cpu_percentage_aggregation_function" {
   default     = ".mean(by=['Instance', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "cpu_percentage_transformation_function" {
-  description = "Transformation function for cpu_percentage detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "cpu_percentage_transformation_window" {
-  description = "Transformation window for cpu_percentage detector (i.e. 5m, 20m, 1h, 1d)"
+variable "cpu_percentage_timer" {
+  description = "Evaluation window for cpu_percentage detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "10m"
 }
@@ -168,14 +162,8 @@ variable "memory_percentage_aggregation_function" {
   default     = ".mean(by=['Instance', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "memory_percentage_transformation_function" {
-  description = "Transformation function for memory_percentage detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "memory_percentage_transformation_window" {
-  description = "Transformation window for memory_percentage detector (i.e. 5m, 20m, 1h, 1d)"
+variable "memory_percentage_timer" {
+  description = "Evaluation window for memory_percentage detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }

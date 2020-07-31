@@ -1,10 +1,10 @@
 resource "signalfx_detector" "heartbeat" {
-  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure Server Farm heartbeat"
+  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure App Service Plan heartbeat"
 
   program_text = <<-EOF
         from signalfx.detectors.not_reporting import not_reporting
         base_filter = filter('resource_type', 'Microsoft.Web/serverFarms') and filter('primary_aggregation_type', 'true')
-        signal = data('CpuPercentage', filter=base_filter and ${module.filter-tags.filter_custom})
+        signal = data('CpuPercentage', filter=base_filter and ${module.filter-tags.filter_custom}).publish('signal')
         not_reporting.detector(stream=signal, resource_identifier=['azure_resource_name', 'azure_resource_group_name', 'azure_region'], duration='${var.heartbeat_timeframe}').publish('CRIT')
     EOF
 
@@ -19,13 +19,13 @@ resource "signalfx_detector" "heartbeat" {
 }
 
 resource "signalfx_detector" "cpu_percentage" {
-  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure Server Farm CPU percentage"
+  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure App Service Plan CPU percentage"
 
   program_text = <<-EOF
         base_filter = filter('resource_type', 'Microsoft.Web/serverFarms') and filter('primary_aggregation_type', 'true')
-        signal = data('CpuPercentage', filter=base_filter and ${module.filter-tags.filter_custom})${var.cpu_percentage_aggregation_function}.${var.cpu_percentage_transformation_function}(over='${var.cpu_percentage_transformation_window}')
-        detect(when(signal > ${var.cpu_percentage_threshold_critical})).publish('CRIT')
-        detect(when(signal > ${var.cpu_percentage_threshold_warning}) and when(signal <= ${var.cpu_percentage_threshold_critical})).publish('WARN')
+        signal = data('CpuPercentage', filter=base_filter and ${module.filter-tags.filter_custom})${var.cpu_percentage_aggregation_function}.publish('signal')
+        detect(when(signal > threshold(${var.cpu_percentage_threshold_critical}), lasting="${var.cpu_percentage_timer}")).publish('CRIT')
+        detect(when(signal > threshold(${var.cpu_percentage_threshold_warning}), lasting="${var.cpu_percentage_timer}") and when(signal <= ${var.cpu_percentage_threshold_critical})).publish('WARN')
     EOF
 
   rule {
@@ -48,13 +48,13 @@ resource "signalfx_detector" "cpu_percentage" {
 }
 
 resource "signalfx_detector" "memory_percentage" {
-  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure Server Farm memory percentage"
+  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Azure App Service Plan memory percentage"
 
   program_text = <<-EOF
         base_filter = filter('resource_type', 'Microsoft.Web/serverFarms') and filter('primary_aggregation_type', 'true')
-        signal = data('MemoryPercentage', filter=base_filter and ${module.filter-tags.filter_custom})${var.memory_percentage_aggregation_function}.${var.memory_percentage_transformation_function}(over='${var.memory_percentage_transformation_window}')
-        detect(when(signal > ${var.memory_percentage_threshold_critical})).publish('CRIT')
-        detect(when(signal > ${var.memory_percentage_threshold_warning}) and when(signal <= ${var.memory_percentage_threshold_critical})).publish('WARN')
+        signal = data('MemoryPercentage', filter=base_filter and ${module.filter-tags.filter_custom})${var.memory_percentage_aggregation_function}.publish('signal')
+        detect(when(signal > threshold(${var.memory_percentage_threshold_critical}), lasting="${var.memory_percentage_timer}")).publish('CRIT')
+        detect(when(signal > threshold(${var.memory_percentage_threshold_warning}), lasting="${var.memory_percentage_timer}") and when(signal <= ${var.memory_percentage_threshold_critical})).publish('WARN')
     EOF
 
   rule {
