@@ -18,29 +18,19 @@ EOF
 }
 
 resource "signalfx_detector" "ready" {
-  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Kubernetes node ready state"
+  name = "${join("", formatlist("[%s]", var.prefixes))}[${var.environment}] Kubernetes node status"
 
   program_text = <<-EOF
-		signal = data('kubernetes.node_ready', filter=(not filter('aws_state', '{Code: 32,Name: shutting-down', '{Code: 48,Name: terminated}', '{Code: 62,Name: stopping}', '{Code: 80,Name: stopped}')) and (not filter('gcp_status', '{Code=3, Name=STOPPING}', '{Code=4, Name=TERMINATED}')) and (not filter('azure_power_state', 'PowerState/stopping', 'PowerState/stoppped', 'PowerState/deallocating', 'PowerState/deallocated')) and ${module.filter-tags.filter_custom})${var.ready_aggregation_function}.${var.ready_transformation_function}(over='${var.ready_transformation_window}').publish('signal')
-		detect(when(signal < ${var.ready_threshold_critical})).publish('CRIT')
-		detect(when(signal < ${var.ready_threshold_warning}) and when(signal >= ${var.ready_threshold_critical})).publish('WARN')
+		signal = data('kubernetes.node_ready', filter=(not filter('aws_state', '{Code: 32,Name: shutting-down', '{Code: 48,Name: terminated}', '{Code: 62,Name: stopping}', '{Code: 80,Name: stopped}')) and (not filter('gcp_status', '{Code=3, Name=STOPPING}', '{Code=4, Name=TERMINATED}')) and (not filter('azure_power_state', 'PowerState/stopping', 'PowerState/stoppped', 'PowerState/deallocating', 'PowerState/deallocated')) and ${module.filter-tags.filter_custom})${var.ready_aggregation_function}.publish('signal')
+		detect(when(signal == ${var.ready_threshold_critical}, lasting='${var.ready_timer}')).publish('CRIT')
 EOF
 
   rule {
-    description           = "is too high >= ${var.ready_threshold_critical}"
+    description           = "is not ready"
     severity              = "Critical"
     detect_label          = "CRIT"
-    disabled              = coalesce(var.ready_disabled_critical, var.ready_disabled, var.detectors_disabled)
-    notifications         = coalescelist(var.ready_notifications_critical, var.ready_notifications, var.notifications)
-    parameterized_subject = "[{{ruleSeverity}}]{{{detectorName}}} {{{readableRule}}} ({{inputs.signal.value}}) on {{{dimensions}}}"
-  }
-
-  rule {
-    description           = "is too high >= ${var.ready_threshold_warning}"
-    severity              = "Warning"
-    detect_label          = "WARN"
-    disabled              = coalesce(var.ready_disabled_warning, var.ready_disabled, var.detectors_disabled)
-    notifications         = coalescelist(var.ready_notifications_warning, var.ready_notifications, var.notifications)
+    disabled              = coalesce(var.ready_disabled, var.detectors_disabled)
+    notifications         = coalescelist(var.ready_notifications, var.notifications)
     parameterized_subject = "[{{ruleSeverity}}]{{{detectorName}}} {{{readableRule}}} ({{inputs.signal.value}}) on {{{dimensions}}}"
   }
 }

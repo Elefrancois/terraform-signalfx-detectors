@@ -64,32 +64,8 @@ variable "ready_disabled" {
   default     = null
 }
 
-variable "ready_disabled_critical" {
-  description = "Disable critical alerting rule for ready detector"
-  type        = bool
-  default     = null
-}
-
-variable "ready_disabled_warning" {
-  description = "Disable warning alerting rule for ready detector"
-  type        = bool
-  default     = null
-}
-
 variable "ready_notifications" {
   description = "Notification recipients list for every alerting rules of ready detector"
-  type        = list
-  default     = []
-}
-
-variable "ready_notifications_warning" {
-  description = "Notification recipients list for warning alerting rule of ready detector"
-  type        = list
-  default     = []
-}
-
-variable "ready_notifications_critical" {
-  description = "Notification recipients list for critical alerting rule of ready detector"
   type        = list
   default     = []
 }
@@ -100,28 +76,16 @@ variable "ready_aggregation_function" {
   default     = ""
 }
 
-variable "ready_transformation_function" {
-  description = "Transformation function for ready detector (mean, min, max)"
-  type        = string
-  default     = "mean"
-}
-
-variable "ready_transformation_window" {
-  description = "Transformation window for ready detector (i.e. 5m, 20m, 1h, 1d)"
-  type        = string
-  default     = "6m"
-}
-
 variable "ready_threshold_critical" {
   description = "Critical threshold for ready detector"
   type        = number
-  default     = 0.5
+  default     = 0
 }
 
-variable "ready_threshold_warning" {
-  description = "Warning threshold for ready detector"
-  type        = number
-  default     = 1
+variable "ready_timer" {
+  description = "Lasting function window (i.e. 5m, 20m, 1h, 1d)"
+  type        = string
+  default     = "30m"
 }
 
 # Volume_space detectors
