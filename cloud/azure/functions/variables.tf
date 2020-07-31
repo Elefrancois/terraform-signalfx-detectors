@@ -100,14 +100,8 @@ variable "http_5xx_errors_rate_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "http_5xx_errors_rate_transformation_function" {
-  description = "Transformation function for http_5xx_errors_rate detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "http_5xx_errors_rate_transformation_window" {
-  description = "Transformation window for http_5xx_errors_rate detector (i.e. 5m, 20m, 1h, 1d)"
+variable "http_5xx_errors_rate_timer" {
+  description = "Evaluation window for http_5xx_errors_rate detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -168,14 +162,8 @@ variable "high_connections_count_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "high_connections_count_transformation_function" {
-  description = "Transformation function for high_connections_count detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "high_connections_count_transformation_window" {
-  description = "Transformation window for high_connections_count detector (i.e. 5m, 20m, 1h, 1d)"
+variable "high_connections_count_timer" {
+  description = "Evaluation window for high_connections_count detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -236,14 +224,8 @@ variable "high_threads_count_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "high_threads_count_transformation_function" {
-  description = "Transformation function for high_threads_count detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "high_threads_count_transformation_window" {
-  description = "Transformation window for high_threads_count detector (i.e. 5m, 20m, 1h, 1d)"
+variable "high_threads_count_timer" {
+  description = "Evaluation window for high_threads_count detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
