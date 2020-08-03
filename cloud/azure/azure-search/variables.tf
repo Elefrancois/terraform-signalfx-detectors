@@ -82,14 +82,8 @@ variable "search_latency_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "search_latency_transformation_function" {
-  description = "Transformation function for search_latency detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "search_latency_transformation_window" {
-  description = "Transformation window for search_latency detector (i.e. 5m, 20m, 1h, 1d)"
+variable "search_latency_timer" {
+  description = "Evaluation window for search_latency detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -150,14 +144,8 @@ variable "search_throttled_queries_rate_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "search_throttled_queries_rate_transformation_function" {
-  description = "Transformation function for search_throttled_queries_rate detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "search_throttled_queries_rate_transformation_window" {
-  description = "Transformation window for search_throttled_queries_rate detector (i.e. 5m, 20m, 1h, 1d)"
+variable "search_throttled_queries_rate_timer" {
+  description = "Evaluation window for search_throttled_queries_rate detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
