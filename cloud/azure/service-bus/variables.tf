@@ -88,14 +88,8 @@ variable "active_connections_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "active_connections_transformation_function" {
-  description = "Transformation function for active_connections detector (mean, min, max)"
-  type        = string
-  default     = "max"
-}
-
-variable "active_connections_transformation_window" {
-  description = "Transformation window for active_connections detector (i.e. 5m, 20m, 1h, 1d)"
+variable "active_connections_timer" {
+  description = "Evaluation window for active_connections detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -150,14 +144,8 @@ variable "user_errors_aggregation_function" {
   default     = ".mean(by=['entityname', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "user_errors_transformation_function" {
-  description = "Transformation function for user_errors detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "user_errors_transformation_window" {
-  description = "Transformation window for user_errors detector (i.e. 5m, 20m, 1h, 1d)"
+variable "user_errors_timer" {
+  description = "Evaluation window for user_errors detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -172,18 +160,6 @@ variable "user_errors_threshold_warning" {
   description = "Warning threshold for user_errors detector"
   type        = number
   default     = 50
-}
-
-variable "user_errors_aperiodic_duration" {
-  description = "Duration for the user_errors block"
-  type        = string
-  default     = "10m"
-}
-
-variable "user_errors_aperiodic_percentage" {
-  description = "Percentage for the user_errors block"
-  type        = number
-  default     = 0.9
 }
 
 # Server_errors detectors
@@ -230,14 +206,8 @@ variable "server_errors_aggregation_function" {
   default     = ".mean(by=['entityname', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "server_errors_transformation_function" {
-  description = "Transformation function for server_errors detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "server_errors_transformation_window" {
-  description = "Transformation window for server_errors detector (i.e. 5m, 20m, 1h, 1d)"
+variable "server_errors_timer" {
+  description = "Evaluation window for server_errors detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -252,16 +222,4 @@ variable "server_errors_threshold_warning" {
   description = "Warning threshold for server_errors detector"
   type        = number
   default     = 50
-}
-
-variable "server_errors_aperiodic_duration" {
-  description = "Duration for the server_errors block"
-  type        = string
-  default     = "10m"
-}
-
-variable "server_errors_aperiodic_percentage" {
-  description = "Percentage for the server_errors block"
-  type        = number
-  default     = 0.9
 }
