@@ -8,9 +8,9 @@ output "su_utilization_id" {
   value       = signalfx_detector.su_utilization.*.id
 }
 
-output "failed_requests_id" {
-  description = "id for detector failed_requests"
-  value       = signalfx_detector.failed_requests.*.id
+output "failed_function_requests_id" {
+  description = "id for detector failed_function_requests"
+  value       = signalfx_detector.failed_function_requests.*.id
 }
 
 output "conversion_errors_id" {

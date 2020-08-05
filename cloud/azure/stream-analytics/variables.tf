@@ -100,14 +100,8 @@ variable "su_utilization_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "su_utilization_transformation_function" {
-  description = "Transformation function for su_utilization detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "su_utilization_transformation_window" {
-  description = "Transformation window for su_utilization detector (i.e. 5m, 20m, 1h, 1d)"
+variable "su_utilization_timer" {
+  description = "Evaluation window for su_utilization detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -124,84 +118,66 @@ variable "su_utilization_threshold_warning" {
   default     = 80
 }
 
-# Failed_requests detectors
+# failed_function_requests detectors
 
-variable "failed_requests_disabled" {
-  description = "Disable all alerting rules for failed_requests detector"
+variable "failed_function_requests_disabled" {
+  description = "Disable all alerting rules for failed_function_requests detector"
   type        = bool
   default     = null
 }
 
-variable "failed_requests_disabled_critical" {
-  description = "Disable critical alerting rule for failed_requests detector"
+variable "failed_function_requests_disabled_critical" {
+  description = "Disable critical alerting rule for failed_function_requests detector"
   type        = bool
   default     = null
 }
 
-variable "failed_requests_disabled_warning" {
-  description = "Disable warning alerting rule for failed_requests detector"
+variable "failed_function_requests_disabled_warning" {
+  description = "Disable warning alerting rule for failed_function_requests detector"
   type        = bool
   default     = null
 }
 
-variable "failed_requests_notifications" {
-  description = "Notification recipients list for every alerting rules of failed_requests detector"
+variable "failed_function_requests_notifications" {
+  description = "Notification recipients list for every alerting rules of failed_function_requests detector"
   type        = list(string)
   default     = []
 }
 
-variable "failed_requests_notifications_warning" {
-  description = "Notification recipients list for warning alerting rule of failed_requests detector"
+variable "failed_function_requests_notifications_warning" {
+  description = "Notification recipients list for warning alerting rule of failed_function_requests detector"
   type        = list(string)
   default     = []
 }
 
-variable "failed_requests_notifications_critical" {
-  description = "Notification recipients list for critical alerting rule of failed_requests detector"
+variable "failed_function_requests_notifications_critical" {
+  description = "Notification recipients list for critical alerting rule of failed_function_requests detector"
   type        = list(string)
   default     = []
 }
 
-variable "failed_requests_aggregation_function" {
-  description = "Aggregation function and group by for failed_requests detector (i.e. \".mean(by=['host'])\")"
+variable "failed_function_requests_aggregation_function" {
+  description = "Aggregation function and group by for failed_function_requests detector (i.e. \".mean(by=['host'])\")"
   type        = string
-  default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
+  default     = ".mean(by=['logicalname', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "failed_requests_transformation_function" {
-  description = "Transformation function for failed_requests detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "failed_requests_transformation_window" {
-  description = "Transformation window for failed_requests detector (i.e. 5m, 20m, 1h, 1d)"
+variable "failed_function_requests_timer" {
+  description = "Evaluation window for failed_function_requests detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
 
-variable "failed_requests_threshold_critical" {
-  description = "Critical threshold for failed_requests detector"
+variable "failed_function_requests_threshold_critical" {
+  description = "Critical threshold for failed_function_requests detector"
   type        = number
   default     = 10
 }
 
-variable "failed_requests_threshold_warning" {
-  description = "Warning threshold for failed_requests detector"
+variable "failed_function_requests_threshold_warning" {
+  description = "Warning threshold for failed_function_requests detector"
   type        = number
   default     = 0
-}
-
-variable "failed_requests_aperiodic_duration" {
-  description = "Duration for the failed_requests block"
-  type        = string
-  default     = "10m"
-}
-
-variable "failed_requests_aperiodic_percentage" {
-  description = "Percentage for the failed_requests block"
-  type        = number
-  default     = 0.9
 }
 
 # Conversion_errors detectors
@@ -245,17 +221,11 @@ variable "conversion_errors_notifications_critical" {
 variable "conversion_errors_aggregation_function" {
   description = "Aggregation function and group by for conversion_errors detector (i.e. \".mean(by=['host'])\")"
   type        = string
-  default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
+  default     = ".mean(by=['logicalname', 'azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "conversion_errors_transformation_function" {
-  description = "Transformation function for conversion_errors detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "conversion_errors_transformation_window" {
-  description = "Transformation window for conversion_errors detector (i.e. 5m, 20m, 1h, 1d)"
+variable "conversion_errors_timer" {
+  description = "Evaluation window for conversion_errors detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
@@ -316,14 +286,8 @@ variable "runtime_errors_aggregation_function" {
   default     = ".mean(by=['azure_resource_name', 'azure_resource_group_name', 'azure_region'])"
 }
 
-variable "runtime_errors_transformation_function" {
-  description = "Transformation function for runtime_errors detector (mean, min, max)"
-  type        = string
-  default     = "min"
-}
-
-variable "runtime_errors_transformation_window" {
-  description = "Transformation window for runtime_errors detector (i.e. 5m, 20m, 1h, 1d)"
+variable "runtime_errors_timer" {
+  description = "Evaluation window for runtime_errors detector (i.e. 5m, 20m, 1h, 1d)"
   type        = string
   default     = "5m"
 }
