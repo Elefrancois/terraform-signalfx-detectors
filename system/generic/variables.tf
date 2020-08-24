@@ -36,6 +36,12 @@ variable "detectors_disabled" {
   default     = false
 }
 
+variable "extrapolation" {
+  description = "Specifies how to extrapolate missing data (null, zero, last_value)"
+  type        = string
+  default     = "null"
+}
+
 # System generic specific
 
 variable "heartbeat_disabled" {
@@ -457,4 +463,3 @@ variable "memory_threshold_warning" {
   type        = number
   default     = 90
 }
-
